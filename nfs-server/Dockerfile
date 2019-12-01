@@ -17,7 +17,6 @@ RUN apk add --no-cache --update \
   iproute2 \
   && rm -rf /var/cache/apk /tmp /sbin/halt /sbin/poweroff /sbin/reboot \
   && mkdir -p /var/lib/nfs/rpc_pipefs /var/lib/nfs/v4recovery /nfsshare \
-  && mount /mnt/sda1 /nfsshare \
   && echo "rpc_pipefs    /var/lib/nfs/rpc_pipefs rpc_pipefs      defaults        0       0" >> /etc/fstab \
   && echo "nfsd  /proc/fs/nfsd   nfsd    defaults        0       0" >> /etc/fstab \
   && echo $'#!/bin/sh\n\ \
@@ -61,6 +60,8 @@ COPY .bashrc /root/.bashrc
 
 #ENTRYPOINT ["/usr/bin/entry.sh"]
 RUN chmod +x /usr/bin/nfsd.sh
+RUN mount /mnt/sda1 /nfsshare
+
 ENTRYPOINT ["/usr/bin/nfsd.sh"]
 
 RUN curl -SLO "https://raw.githubusercontent.com/balena-io-library/base-images/a95300eda2320833e537ca20d728a870bf02177d/scripts/assets/tests/test-os.sh" \
