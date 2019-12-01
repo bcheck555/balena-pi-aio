@@ -23,3 +23,12 @@ services:
     build: ./dnscrypt-proxy
     ports:
       - '5053:5053/udp'
+
+  nfs-server:
+    build: ./nfs-server
+    privileged: true
+    ports:
+      - '2049:2049/tcp'
+      - '2049:2049/udp'
+        #    volumes:
+        #      - '/mnt/usb:/nfsshare'
