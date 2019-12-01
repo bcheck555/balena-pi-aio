@@ -1,6 +1,0 @@
-[submodule "balena-pihole"]
-	path = balena-pihole
-	url = git://github.com/bcheck555/balena-pihole.git
-[submodule "nfs-server-alpine"]
-	path = nfs-server-alpine
-	url = git://github.com/bcheck555/nfs-server-alpine
