@@ -59,11 +59,11 @@ COPY exports /etc/
 COPY nfsd.sh /usr/bin/nfsd.sh
 COPY .bashrc /root/.bashrc
 
-#ENTRYPOINT ["/usr/bin/entry.sh"]
 RUN chmod +x /usr/bin/nfsd.sh
 #RUN mount /mnt/sda1 /nfsshare
 
-ENTRYPOINT ["/usr/bin/nfsd.sh"]
+ENTRYPOINT ["/usr/bin/entry.sh"]
+#ENTRYPOINT ["/usr/bin/nfsd.sh"]
 
 RUN curl -SLO "https://raw.githubusercontent.com/balena-io-library/base-images/a95300eda2320833e537ca20d728a870bf02177d/scripts/assets/tests/test-os.sh" \
   && echo "Running test-os" \
