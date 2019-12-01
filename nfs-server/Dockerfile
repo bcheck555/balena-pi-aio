@@ -60,7 +60,7 @@ COPY .bashrc /root/.bashrc
 
 #ENTRYPOINT ["/usr/bin/entry.sh"]
 RUN chmod +x /usr/bin/nfsd.sh
-RUN mount /mnt/sda1 /nfsshare
+#RUN mount /mnt/sda1 /nfsshare
 
 ENTRYPOINT ["/usr/bin/nfsd.sh"]
 
