@@ -51,7 +51,7 @@ RUN curl -SLO "http://resin-packages.s3.amazonaws.com/resin-xbuild/v1.0.0/resin-
   && ln -sf resin-xbuild /usr/bin/cross-build-start \
   && ln -sf resin-xbuild /usr/bin/cross-build-end
 
-ENV UDEV off
+ENV UDEV on
 
 COPY entry.sh /usr/bin/entry.sh
 COPY exports /etc/
