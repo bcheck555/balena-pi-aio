@@ -64,7 +64,7 @@ RUN chmod +x /usr/bin/nfsd.sh
 
 ENTRYPOINT ["/usr/bin/entry.sh"]
 ENTRYPOINT ["/usr/bin/nfsd.sh"]
-ENTRYPOINT ["/bin/bash"]
+#ENTRYPOINT ["/bin/bash"]
 
 RUN curl -SLO "https://raw.githubusercontent.com/balena-io-library/base-images/a95300eda2320833e537ca20d728a870bf02177d/scripts/assets/tests/test-os.sh" \
   && echo "Running test-os" \
