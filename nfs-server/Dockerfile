@@ -4,7 +4,7 @@ LABEL io.balena.architecture="rpi"
 LABEL io.balena.qemu.version="4.0.0+balena-arm"
 COPY qemu-arm-static /usr/bin 
 
-RUN apk add --no-cache \
+RUN apk add --no-cache --update \
   bash \
   ca-certificates \
   curl \
@@ -13,7 +13,13 @@ RUN apk add --no-cache \
   tar \
   udev \
   gnupg \
-  && echo $'#!/bin/sh\n\
+  nfs-utils \
+  iproute2 \
+  && rm -rf /var/cache/apk /tmp /sbin/halt /sbin/poweroff /sbin/reboot \
+  && mkdir -p /var/lib/nfs/rpc_pipefs /var/lib/nfs/v4recovery \
+  && echo "rpc_pipefs    /var/lib/nfs/rpc_pipefs rpc_pipefs      defaults        0       0" >> /etc/fstab \
+  && echo "nfsd  /proc/fs/nfsd   nfsd    defaults        0       0" >> /etc/fstab
+  && echo $'#!/bin/sh\n\ \
 set -e\n\
 set -u\n\
 n=0\n\
@@ -48,7 +54,13 @@ RUN curl -SLO "http://resin-packages.s3.amazonaws.com/resin-xbuild/v1.0.0/resin-
 ENV UDEV off
 
 COPY entry.sh /usr/bin/entry.sh
-ENTRYPOINT ["/usr/bin/entry.sh"]
+COPY exports /etc/
+COPY nfsd.sh /usr/bin/nfsd.sh
+COPY .bashrc /root/.bashrc
+
+#ENTRYPOINT ["/usr/bin/entry.sh"]
+RUN chmod +x /usr/bin/nfsd.sh
+ENTRYPOINT ["/usr/bin/nfsd.sh"]
 
 RUN curl -SLO "https://raw.githubusercontent.com/balena-io-library/base-images/a95300eda2320833e537ca20d728a870bf02177d/scripts/assets/tests/test-os.sh" \
   && echo "Running test-os" \
