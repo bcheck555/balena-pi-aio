@@ -15,9 +15,6 @@ RUN apk add --no-cache --update \
   gnupg \
   wget \
   python \
-  python-twisted \
-  python-openssl \
-  python-setuptools \
   && echo $'#!/bin/sh\n\
 set -e\n\
 set -u\n\
