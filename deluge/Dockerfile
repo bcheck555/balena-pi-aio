@@ -73,7 +73,7 @@ RUN apk add --update \
 RUN apk add --update \
   python \
   python-twisted \
-  python-openssl \
+  py3-openssl \
   python-setuptools \
   intltool \
   python-xdg \
