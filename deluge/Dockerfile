@@ -51,11 +51,12 @@ ENV UDEV on
 RUN adduser --system -u 1000 deluge
 
 # Deluge version.
-ARG DELUGE_VERSION=1.3.13
+ARG DELUGE_VERSION=2.0.3
 
 # Install Deluge.
 WORKDIR /
-RUN wget http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.tar.gz
+#RUN wget http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.tar.gz
+RUN wget http://download.deluge-torrent.org/source/2.0/deluge-${DELUGE_VERSION}.tar.xz
 RUN tar -zxvf deluge-${DELUGE_VERSION}.tar.gz
 RUN rm deluge-${DELUGE_VERSION}.tar.gz
 RUN cd deluge-${DELUGE_VERSION}; python setup.py build; python setup.py install
