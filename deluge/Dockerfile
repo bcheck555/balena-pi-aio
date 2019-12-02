@@ -14,21 +14,6 @@ RUN apk add --no-cache --update \
   udev \
   gnupg \
   wget \
-  python \
-  python-twisted \
-  python-openssl \
-  python-setuptools \
-  intltool \
-  python-xdg \
-  python-chardet \
-  geoip-database \
-  python-libtorrent \
-  python-notify \
-  python-pygame \
-  python-glade2 \
-  librsvg2-common \
-  xdg-utils \
-  python-mako \
   && echo $'#!/bin/sh\n\
 set -e\n\
 set -u\n\
