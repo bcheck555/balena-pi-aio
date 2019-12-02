@@ -66,7 +66,7 @@ ARG DELUGE_VERSION=2.0.3
 
 WORKDIR /
 RUN wget http://download.deluge-torrent.org/source/2.0/deluge-${DELUGE_VERSION}.tar.xz \
-&& tar -xvf /deluge-${DELUGE_VERSION}.tar.xz \
+&& tar -xf /deluge-${DELUGE_VERSION}.tar.xz \
 && rm /deluge-${DELUGE_VERSION}.tar.xz \
 && cd /deluge-${DELUGE_VERSION}; python setup.py build; python setup.py install
 
