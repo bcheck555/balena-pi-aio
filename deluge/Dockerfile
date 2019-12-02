@@ -30,6 +30,7 @@ RUN \
 	deluged \
 	deluge-console \
 	deluge-web \
+	nfs-common \
 	p7zip-full \
 	unrar \
 	unzip && \
