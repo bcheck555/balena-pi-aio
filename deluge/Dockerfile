@@ -68,6 +68,25 @@ RUN apk add --update \
 		zlib-dev \
 		xz \
 	&& rm -rf /var/cache/apk/*
+	
+# Install packages
+RUN apk add --update \
+  python \
+  python-twisted \
+  python-openssl \
+  python-setuptools \
+  intltool \
+  python-xdg \
+  python-chardet \
+  geoip-database \
+  python-libtorrent \
+  python-notify \
+  python-pygame \
+  python-glade2 \
+  librsvg2-common \
+  xdg-utils \
+  python-mako \
+	&& rm -rf /var/cache/apk/*
 
 RUN curl -SLO "http://resin-packages.s3.amazonaws.com/resin-xbuild/v1.0.0/resin-xbuild1.0.0.tar.gz" \
   && echo "1eb099bc3176ed078aa93bd5852dbab9219738d16434c87fc9af499368423437  resin-xbuild1.0.0.tar.gz" | sha256sum -c - \
