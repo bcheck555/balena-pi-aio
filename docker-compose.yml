@@ -37,7 +37,8 @@ services:
     #privileged: true
     volumes:
       - 'deluge_config:/config'
-    ports:
-      - '8112:8112/tcp'
-      - '58846:58846/tcp'
-      - '58846:58846/udp'
+    network_mode: host
+    #ports:
+    #  - '8112:8112/tcp'
+    #  - '58846:58846/tcp'
+    #  - '58846:58846/udp'
