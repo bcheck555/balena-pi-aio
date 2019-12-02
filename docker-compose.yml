@@ -3,6 +3,7 @@ version: '2.1'
 volumes:
   pihole_config:
   dnsmasq_config:
+  deluge_config:
 
 services:
   pihole:
