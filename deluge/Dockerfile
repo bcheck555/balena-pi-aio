@@ -57,8 +57,10 @@ ARG DELUGE_VERSION=2.0.3
 WORKDIR /
 #RUN wget http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.tar.gz
 RUN wget http://download.deluge-torrent.org/source/2.0/deluge-${DELUGE_VERSION}.tar.xz
-RUN tar -zxvf deluge-${DELUGE_VERSION}.tar.gz
-RUN rm deluge-${DELUGE_VERSION}.tar.gz
+#RUN tar -zxvf deluge-${DELUGE_VERSION}.tar.gz
+RUN tar -zxvf deluge-${DELUGE_VERSION}.tar.xz
+#RUN rm deluge-${DELUGE_VERSION}.tar.gz
+RUN rm deluge-${DELUGE_VERSION}.tar.xz
 RUN cd deluge-${DELUGE_VERSION}; python setup.py build; python setup.py install
 
 COPY start.sh /start.sh
