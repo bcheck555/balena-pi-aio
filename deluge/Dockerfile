@@ -23,7 +23,7 @@ RUN \
 	/etc/apt/sources.list.d/deluge.list && \
  echo "**** install packages ****" && \
  mkdir /downloads && \
- echo "/dev/sda1 /downloads ext4 rw,relatime,discard,data=ordered 0 2" >> \
+ echo "192.168.5.35:/ /downloads nfs defaults,noatime 0 0" >> \
  	/etc/fstab && \
  apt-get update && \
  apt-get install -y \
