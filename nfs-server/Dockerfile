@@ -19,7 +19,7 @@ RUN apk add --no-cache --update \
   && mkdir -p /var/lib/nfs/rpc_pipefs /var/lib/nfs/v4recovery /nfsshare \
   && echo "rpc_pipefs    /var/lib/nfs/rpc_pipefs rpc_pipefs      defaults 0 0" >> /etc/fstab \
   && echo "nfsd  /proc/fs/nfsd   nfsd    defaults 0 0" >> /etc/fstab \
-  && echo "/dev/sda1 /nfsshare ext4 ro,relatime,discard,data=ordered 0 2" >> /etc/fstab \
+  && echo "/dev/sda1 /nfsshare ext4 rw,relatime,discard,data=ordered 0 2" >> /etc/fstab \
   && echo $'#!/bin/sh\n\ \
 set -e\n\
 set -u\n\
