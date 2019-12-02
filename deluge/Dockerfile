@@ -1,172 +1,44 @@
-FROM arm32v6/alpine:3.10
-LABEL io.balena.architecture="rpi"
- 
-LABEL io.balena.qemu.version="4.0.0+balena-arm"
-COPY qemu-arm-static /usr/bin 
+FROM lsiobase/ubuntu:arm32v7-bionic
 
-RUN apk add --no-cache --update \
-  bash \
-  ca-certificates \
-  curl \
-  dbus \
-  findutils \
-  tar \
-  udev \
-  gnupg \
-  wget \
-  python \
-  && echo $'#!/bin/sh\n\
-set -e\n\
-set -u\n\
-n=0\n\
-max=2\n\
-until [ $n -gt $max ]; do\n\
-  set +e\n\
-  (\n\
-    apk add --no-cache "$@"\n\
-  )\n\
-  CODE=$?\n\
-  set -e\n\
-  if [ $CODE -eq 0 ]; then\n\
-    break\n\
-  fi\n\
-  if [ $n -eq $max ]; then\n\
-    exit $CODE\n\
-  fi\n\
-  echo "apk failed, retrying"\n\
-  n=$(($n + 1))\n\
-done' > /usr/sbin/install_packages \
-  && chmod 0755 "/usr/sbin/install_packages"
-  
-# Install packages for build variant
-RUN apk add --update \
-		bzr \
-		git \
-		mercurial \
-		openssh-client \
-		subversion \
-		ca-certificates \
-		curl \
-		wget \
-		autoconf \
-		build-base \
-		imagemagick \
-		libbz2 \
-		libevent-dev \
-		libffi-dev \
-		glib-dev \
-		jpeg-dev \
-		imagemagick-dev \
-		ncurses5-libs \
-		libpq \
-		readline-dev \
-		sqlite-dev \
-		openssl-dev \
-		libxml2-dev \
-		libxslt-dev \
-		yaml-dev \
-		zlib-dev \
-		xz \
-	&& rm -rf /var/cache/apk/*
-	
-# Install packages
-RUN apk add --update \
-  python \
-  python-twisted \
-  py3-openssl \
-  python-setuptools \
-  intltool \
-  python-xdg \
-  python-chardet \
-  geoip-database \
-  python-libtorrent \
-  python-notify \
-  python-pygame \
-  python-glade2 \
-  librsvg2-common \
-  xdg-utils \
-  python-mako \
-	&& rm -rf /var/cache/apk/*
+# set version label
+ARG BUILD_DATE
+ARG VERSION
+LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="sparklyballs, aptalca"
 
-RUN curl -SLO "http://resin-packages.s3.amazonaws.com/resin-xbuild/v1.0.0/resin-xbuild1.0.0.tar.gz" \
-  && echo "1eb099bc3176ed078aa93bd5852dbab9219738d16434c87fc9af499368423437  resin-xbuild1.0.0.tar.gz" | sha256sum -c - \
-  && tar -xzf "resin-xbuild1.0.0.tar.gz" \
-  && rm "resin-xbuild1.0.0.tar.gz" \
-  && chmod +x resin-xbuild \
-  && mv resin-xbuild /usr/bin \
-  && ln -sf resin-xbuild /usr/bin/cross-build-start \
-  && ln -sf resin-xbuild /usr/bin/cross-build-end
+# environment variables
+ARG DEBIAN_FRONTEND="noninteractive"
+ENV PYTHON_EGG_CACHE="/config/plugins/.python-eggs"
 
-ENV UDEV on
+# install software
+RUN \
+ echo "**** add repositories ****" && \
+ apt-get update && \
+ apt-get install -y \
+	gnupg && \
+ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C5E6A5ED249AD24C && \
+ echo "deb http://ppa.launchpad.net/deluge-team/stable/ubuntu bionic main" >> \
+	/etc/apt/sources.list.d/deluge.list && \
+ echo "deb-src http://ppa.launchpad.net/deluge-team/stable/ubuntu bionic main" >> \
+	/etc/apt/sources.list.d/deluge.list && \
+ echo "**** install packages ****" && \
+ apt-get update && \
+ apt-get install -y \
+	deluged \
+	deluge-console \
+	deluge-web \
+	p7zip-full \
+	unrar \
+	unzip && \
+ echo "**** cleanup ****" && \
+ rm -rf \
+	/tmp/* \
+	/var/lib/apt/lists/* \
+	/var/tmp/*
 
-RUN adduser --system -u 1000 deluge
+# add local files
+COPY root/ /
 
-# Deluge version.
-ARG DELUGE_VERSION=2.0.3
-
-# Install Deluge.
-#WORKDIR /
-#RUN wget http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.tar.gz
-#RUN wget http://download.deluge-torrent.org/source/2.0/deluge-${DELUGE_VERSION}.tar.xz
-#RUN tar -zxvf deluge-${DELUGE_VERSION}.tar.gz
-#RUN tar -zxvf deluge-${DELUGE_VERSION}.tar.xz
-#RUN rm deluge-${DELUGE_VERSION}.tar.gz
-#RUN rm deluge-${DELUGE_VERSION}.tar.xz
-#RUN cd deluge-${DELUGE_VERSION}; python setup.py build; python setup.py install
-
-WORKDIR ~
-RUN curl -SLO "http://download.deluge-torrent.org/source/2.0/deluge-${DELUGE_VERSION}.tar.xz" \
-&& tar -xf deluge-${DELUGE_VERSION}.tar.xz \
-&& rm deluge-${DELUGE_VERSION}.tar.xz \
-&& cd deluge-${DELUGE_VERSION}; python setup.py build; python setup.py install
-
-COPY start.sh /start.sh
-COPY entry.sh /usr/bin/entry.sh
-ENTRYPOINT ["/usr/bin/entry.sh"]
-ENTRYPOINT ["/start.sh"]
-
-RUN curl -SLO "https://raw.githubusercontent.com/balena-io-library/base-images/a95300eda2320833e537ca20d728a870bf02177d/scripts/assets/tests/test-os.sh" \
-  && echo "Running test-os" \
-  && chmod +x test-os.sh \
-  && bash test-os.sh alpine 3.10 \
-  && rm -rf test-os.sh
-
-
-
-# Sets up a Deluge server and web client.
-
-#FROM resin/rpi-raspbian:jessie
-#MAINTAINER Jordan Crawford <jordan@crawford.kiwi>
-
-# Install required packages.
-#RUN apt-get update; apt-get install wget python python-twisted python-openssl python-setuptools intltool python-xdg python-chardet geoip-database python-libtorrent python-notify python-pygame python-glade2 librsvg2-common xdg-utils python-mako -y
-
-# Setup a user.
-#RUN adduser --system -u 1000 deluge
-
-# Clean up.
-#RUN apt-get clean
-#RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Deluge version.
-#ARG DELUGE_VERSION=1.3.13
-
-# Install Deluge.
-#WORKDIR /
-#RUN wget http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.tar.gz
-#RUN tar -zxvf deluge-${DELUGE_VERSION}.tar.gz
-#RUN rm deluge-${DELUGE_VERSION}.tar.gz
-#RUN cd deluge-${DELUGE_VERSION}; python setup.py build; python setup.py install
-
-# Expose the deluge control port and the web UI port.
-#EXPOSE 58846 8112
-
-# Setup volumes.
-#VOLUME /config
-#VOLUME /data
-
-# Add the start script.
-#ADD start.sh /start.sh
-
-# Run the start script on boot.
-#CMD ["/start.sh"]
+# ports and volumes
+#EXPOSE 8112 58846 58946 58946/udp
+#VOLUME /config /downloads
