@@ -1,22 +1,22 @@
-FROM balenalib/raspberrypi3-debian:jessie-build AS build
+#FROM balenalib/raspberrypi3-debian:jessie-build AS build
 
-WORKDIR /usr/src
+#WORKDIR /usr/src
 
-RUN install_packages cmake libraspberrypi-dev
+#RUN install_packages cmake libraspberrypi-dev
 
-RUN curl -sSL https://raw.githubusercontent.com/tasanakorn/rpi-fbcp/master/CMakeLists.txt -O
-RUN curl -sSL https://raw.githubusercontent.com/tasanakorn/rpi-fbcp/master/main.c -O
+#RUN curl -sSL https://raw.githubusercontent.com/tasanakorn/rpi-fbcp/master/CMakeLists.txt -O
+#RUN curl -sSL https://raw.githubusercontent.com/tasanakorn/rpi-fbcp/master/main.c -O
 
-WORKDIR /usr/src/build
+#WORKDIR /usr/src/build
 
-RUN cmake .. && make
+#RUN cmake .. && make
 
 FROM pihole/pihole:4.3.2-1_armhf
 
 WORKDIR /usr/src
 
-COPY --from=build /opt/vc/lib/* /opt/vc/lib/
-COPY --from=build /usr/src/build/fbcp /usr/src/
+#COPY --from=build /opt/vc/lib/* /opt/vc/lib/
+#COPY --from=build /usr/src/build/fbcp /usr/src/
 COPY services/ /etc/services.d/
 COPY init/ /etc/cont-init.d/
 
