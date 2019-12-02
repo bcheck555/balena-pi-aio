@@ -22,8 +22,8 @@ RUN \
  echo "deb-src http://ppa.launchpad.net/deluge-team/stable/ubuntu bionic main" >> \
 	/etc/apt/sources.list.d/deluge.list && \
  echo "**** install packages ****" && \
- mkdir /download && \
- echo "/dev/sda1 /download ext4 rw,relatime,discard,data=ordered 0 2" >> \
+ mkdir /downloads && \
+ echo "/dev/sda1 /downloads ext4 rw,relatime,discard,data=ordered 0 2" >> \
  	/etc/fstab && \
  apt-get update && \
  apt-get install -y \
