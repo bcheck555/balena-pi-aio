@@ -14,6 +14,13 @@ RUN apk add --no-cache --update \
   udev \
   gnupg \
   wget \
+  python \
+  python-twisted \
+  python-openssl \
+  python-setuptools \
+  intltool \
+  python-xdg \
+  python-chardet \
   && echo $'#!/bin/sh\n\
 set -e\n\
 set -u\n\
