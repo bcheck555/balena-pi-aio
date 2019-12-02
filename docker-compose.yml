@@ -33,6 +33,7 @@ services:
 
   deluge:
     build: ./deluge
+    privileged: true
     ports:
       - '58846:58846/tcp'
       - '8112:8112/tcp'
