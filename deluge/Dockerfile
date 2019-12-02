@@ -51,7 +51,7 @@ ENV UDEV on
 RUN adduser --system -u 1000 deluge
 
 # Deluge version.
-#ARG DELUGE_VERSION=1.3.13
+ARG DELUGE_VERSION=1.3.13
 
 # Install Deluge.
 WORKDIR /
