@@ -30,5 +30,9 @@ services:
     ports:
       - '2049:2049/tcp'
       - '2049:2049/udp'
-        #    volumes:
-        #      - '/mnt/usb:/nfsshare'
+
+  deluge:
+    build: ./deluge
+    ports:
+      - '58846:58846/tcp'
+      - '8112:8112/tcp'
