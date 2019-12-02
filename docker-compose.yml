@@ -34,11 +34,10 @@ services:
 
   deluge:
     build: ./deluge
-    privileged: true
+    #privileged: true
     volumes:
       - 'deluge_config:/config'
-    network_mode: host
-#    ports:
-#      - '58846:58846/tcp'
-#      - '58846:58846/udp'
-#      - '8112:8112/tcp'
+    ports:
+      - '8112:8112/tcp'
+      - '58846:58846/tcp'
+      - '58846:58846/udp'
