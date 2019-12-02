@@ -34,7 +34,7 @@ services:
 
   deluge:
     build: ./deluge
-    #privileged: true
+    privileged: true
     volumes:
       - 'deluge_config:/config'
     network_mode: host
