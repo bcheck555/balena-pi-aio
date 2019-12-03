@@ -1,4 +1,3 @@
- 
 #!/usr/bin/with-contenv bash
 
 DELUGE_LOGLEVEL=${DELUGE_LOGLEVEL:-warning}
