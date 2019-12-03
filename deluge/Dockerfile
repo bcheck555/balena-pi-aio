@@ -1,37 +1,48 @@
-# Sets up a Deluge server and web client.
+FROM lsiobase/ubuntu:arm32v7-bionic
 
-FROM resin/rpi-raspbian:jessie
-MAINTAINER Jordan Crawford <jordan@crawford.kiwi>
+# set version label
+ARG BUILD_DATE
+ARG VERSION
+LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="sparklyballs, aptalca"
 
-# Install required packages.
-RUN apt-get update; apt-get install wget python python-twisted python-openssl python-setuptools intltool python-xdg python-chardet geoip-database python-libtorrent python-notify python-pygame python-glade2 librsvg2-common xdg-utils python-mako -y
+# environment variables
+ARG DEBIAN_FRONTEND="noninteractive"
+ENV PYTHON_EGG_CACHE="/config/plugins/.python-eggs"
 
-# Setup a user.
-RUN adduser --system -u 1000 deluge
+# install software
+RUN \
+ echo "**** add repositories ****" && \
+ apt-get update && \
+ apt-get install -y \
+	gnupg && \
+ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C5E6A5ED249AD24C && \
+ echo "deb http://ppa.launchpad.net/deluge-team/stable/ubuntu bionic main" >> \
+	/etc/apt/sources.list.d/deluge.list && \
+ echo "deb-src http://ppa.launchpad.net/deluge-team/stable/ubuntu bionic main" >> \
+	/etc/apt/sources.list.d/deluge.list && \
+ echo "**** install packages ****" && \
+ mkdir /downloads && \
+ echo "192.168.5.35:/ /downloads nfs defaults,noatime 0 0" >> \
+ 	/etc/fstab && \
+ apt-get update && \
+ apt-get install -y \
+	deluged \
+	deluge-console \
+	deluge-web \
+	nfs-common \
+	p7zip-full \
+	unrar \
+	unzip && \
+ echo "**** cleanup ****" && \
+ rm -rf \
+	/tmp/* \
+	/var/lib/apt/lists/* \
+	/var/tmp/*
 
-# Clean up.
-RUN apt-get clean
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# add local files
+COPY root/ /
 
-# Deluge version.
-ARG DELUGE_VERSION=1.3.13
-
-# Install Deluge.
-WORKDIR /
-RUN wget http://download.deluge-torrent.org/source/deluge-${DELUGE_VERSION}.tar.gz
-RUN tar -zxvf deluge-${DELUGE_VERSION}.tar.gz
-RUN rm deluge-${DELUGE_VERSION}.tar.gz
-RUN cd deluge-${DELUGE_VERSION}; python setup.py build; python setup.py install
-
-# Expose the deluge control port and the web UI port.
-EXPOSE 58846 8112
-
-# Setup volumes.
-VOLUME /config
-VOLUME /data
-
-# Add the start script.
-ADD start.sh /start.sh
-
-# Run the start script on boot.
-CMD ["/start.sh"]
+# ports and volumes
+#EXPOSE 8112 58846 58946 58946/udp
+#VOLUME /config /downloads
