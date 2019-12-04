@@ -17,6 +17,8 @@ To get started you'll first need to sign up for a free balenaCloud account and f
 
 Once your account is set up, deployment is carried out by downloading the project and pushing it to your device either via Git or the balena CLI.
 
+<https://www.balena.io/blog/deploy-network-wide-ad-blocking-with-pi-hole-and-a-raspberry-pi/>
+
 
 # Reference:
 https://github.com/klutchell/balena-pihole
