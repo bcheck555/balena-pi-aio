@@ -1,6 +1,6 @@
 # balena-pi-aio
 
-This project is a [balenaCloud](https://www.balena.io/cloud) stack project borrowing heavily from the following services:
+This project is a [balenaCloud](https://www.balena.io/cloud) stack project borrowing heavily from the following projects:
 
 * [Pi-hole](https://hub.docker.com/r/pihole/pihole/)
 * [dnscrypt-proxy](https://github.com/DNSCrypt/dnscrypt-proxy) _(optional)_
