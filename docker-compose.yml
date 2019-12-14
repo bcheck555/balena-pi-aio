@@ -38,7 +38,13 @@ services:
     volumes:
       - 'deluge_config:/config'
     network_mode: host
-    #ports:
-    #  - '8112:8112/tcp'
-    #  - '58846:58846/tcp'
-    #  - '58846:58846/udp'
+
+    #  ntp-server:
+    #build: ./ntp-server
+    #privileged: true
+    #network_mode: host
+  chrony:
+    build: ./chrony
+    #privileged: true
+    ports:
+      - '123:123/udp'
