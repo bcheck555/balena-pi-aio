@@ -20,10 +20,10 @@ services:
     network_mode: host
 
   # set pihole DNS1 and DNS2 service variables to 127.0.0.1#5053 to use dnscrypt-proxy for upstream DNS
-  dnscrypt-proxy:
-    build: ./dnscrypt-proxy
-    ports:
-      - '5053:5053/udp'
+  #  dnscrypt-proxy:
+  #  build: ./dnscrypt-proxy
+  #  ports:
+  #    - '5053:5053/udp'
 
   nfs-server:
     build: ./nfs-server
@@ -39,12 +39,8 @@ services:
       - 'deluge_config:/config'
     network_mode: host
 
-    #  ntp-server:
-    #build: ./ntp-server
-    #privileged: true
-    #network_mode: host
-  chrony:
-    build: ./chrony
+  balena-chrony:
+    build: ./balena-chrony
     #privileged: true
     ports:
       - '123:123/udp'
