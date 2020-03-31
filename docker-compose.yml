@@ -19,12 +19,6 @@ services:
       - '192.168.5.1'
     network_mode: host
 
-  # set pihole DNS1 and DNS2 service variables to 127.0.0.1#5053 to use dnscrypt-proxy for upstream DNS
-  #  dnscrypt-proxy:
-  #  build: ./dnscrypt-proxy
-  #  ports:
-  #    - '5053:5053/udp'
-
   nfs-server:
     build: ./nfs-server
     privileged: true
@@ -41,8 +35,6 @@ services:
 
   balena-chrony:
     build: ./balena-chrony
-    #    devices:
-    #  - "/dev/ttyAMA0:/dev/ttyAMA0"
     privileged: true
     ports:
       - '123:123/udp'

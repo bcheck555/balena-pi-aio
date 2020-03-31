@@ -1,4 +1,5 @@
 FROM arm32v6/alpine:3.10
+#FROM arm32v6/alpine:latest
 LABEL io.balena.architecture="rpi"
  
 LABEL io.balena.qemu.version="4.0.0+balena-arm"
