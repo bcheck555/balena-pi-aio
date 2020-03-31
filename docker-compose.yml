@@ -41,6 +41,8 @@ services:
 
   balena-chrony:
     build: ./balena-chrony
-    #privileged: true
+    #    devices:
+    #  - "/dev/ttyAMA0:/dev/ttyAMA0"
+    privileged: true
     ports:
       - '123:123/udp'
